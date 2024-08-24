@@ -5,7 +5,6 @@ Plover entry point extension module for Plover 1Password
     - https://plover.readthedocs.io/en/latest/plugin-dev/meta.html
 """
 import asyncio
-import os
 from typing import Optional
 
 from plover.engine import StenoEngine
@@ -17,11 +16,10 @@ from plover.registry import registry
 
 from onepassword.client import Client
 
+from . import service_account
 from .__version__ import __version__
 
-_DEFAULT_SHELL = "bash"
 _INTEGRATION_NAME = "Plover integration"
-_TOKEN_ENV_VAR_NAME = "$OP_SERVICE_ACCOUNT_TOKEN"
 
 class OnePassword:
     """
@@ -38,7 +36,7 @@ class OnePassword:
         """
         Sets up the meta plugin and service account token.
         """
-        self._service_account_token = OnePassword._get_service_account_token()
+        self._service_account_token = service_account.get_token()
         registry.register_plugin(
             "meta",
             "1PASSWORD",
@@ -51,19 +49,6 @@ class OnePassword:
         """
         Stops the plugin -- no custom action needed.
         """
-
-    @staticmethod
-    def _get_service_account_token() -> Optional[str]:
-        # Handle windows version of command as well; use platform.system() to
-        # check which one to use. Maybe os.getenv works as expected on
-        # Windows...?
-        # "echo $ENV:{_TOKEN_ENV_VAR_NAME}"
-        shell: Optional[str] = os.getenv("SHELL", _DEFAULT_SHELL).split("/")[-1]
-        token: Optional[str] = (
-            os.popen(f"{shell} -ic 'echo {_TOKEN_ENV_VAR_NAME}'").read().strip()
-        )
-
-        return token
 
     async def _one_password(self, ctx: _Context, argument: str) -> _Action:
         """

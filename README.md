@@ -199,6 +199,7 @@ plover --script plover_plugins uninstall plover-1password
 [Build Status image]: https://github.com/paulfioravanti/plover-1password/actions/workflows/ci.yml/badge.svg
 [Build Status url]: https://github.com/paulfioravanti/plover-1password/actions/workflows/ci.yml
 [Copy Secret Reference]: https://developer.1password.com/docs/cli/secret-reference-syntax/#with-the-1password-desktop-app
+[Coverage.py]: https://github.com/nedbat/coveragepy
 [create a new vault]: https://support.1password.com/create-share-vaults/#create-a-vault
 [create a Service Account]: https://developer.1password.com/docs/service-accounts/get-started/#create-a-service-account
 [environment variable]: https://en.wikipedia.org/wiki/Environment_variable
