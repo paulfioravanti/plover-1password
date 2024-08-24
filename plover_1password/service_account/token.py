@@ -13,7 +13,7 @@ _TOKEN_ENV_VAR_NAME = "OP_SERVICE_ACCOUNT_TOKEN"
 _POWERSHELL_COMMAND = "echo $ENV:{0}"
 _SHELL_COMMAND = "{0} -ic 'echo ${1}'"
 
-def get_token() -> Optional[str]:
+def get_token() -> str:
     """
     Returns token from the local environment and errors if it is empty.
     """
