@@ -87,6 +87,23 @@ export OP_SERVICE_ACCOUNT_TOKEN=<your-service-account-token>
 $Env:OP_SERVICE_ACCOUNT_TOKEN = "<your-service-account-token>"
 ```
 
+### Manually install 1Password Python SDK
+
+The [1Password Python SDK][] is not currently available on [PyPI][], which means
+you will need to install it manually directly via URL with the following
+Python [pip][] command in order for the plugin to work properly:
+
+```console
+pip install git+ssh://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
+```
+
+Unfortunately, PyPi does not allow [direct URL dependencies][] in projects, so
+in order to get this plugin on to PyPI, the SDK could not be listed as an
+`install_requires` library (eg
+`onepassword @ git+ssh://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1`,
+meaning a manual installation process instead of the plugin automatically doing
+it for you.
+
 ### Install 1Password CLI and turn on desktop app integration
 
 Follow all the steps to [Get started with 1Password CLI][] to install the
@@ -202,6 +219,7 @@ plover --script plover_plugins uninstall plover-1password
 [Coverage.py]: https://github.com/nedbat/coveragepy
 [create a new vault]: https://support.1password.com/create-share-vaults/#create-a-vault
 [create a Service Account]: https://developer.1password.com/docs/service-accounts/get-started/#create-a-service-account
+[direct URL dependencies]: https://setuptools.pypa.io/en/latest/userguide/dependency_management.html#direct-url-dependencies
 [environment variable]: https://en.wikipedia.org/wiki/Environment_variable
 [extension]: https://plover.readthedocs.io/en/latest/plugin-dev/extensions.html
 [Get started with 1Password CLI]: https://developer.1password.com/docs/cli/get-started/
@@ -212,6 +230,7 @@ plover --script plover_plugins uninstall plover-1password
 [meta]: https://plover.readthedocs.io/en/latest/plugin-dev/metas.html
 [move or copy items]: https://support.1password.com/move-copy-items/
 [Mypy]: https://github.com/python/mypy
+[pip]: https://pip.pypa.io/en/stable/
 [PyPI]: https://pypi.org/
 [PyPI downloads image]:https://img.shields.io/pypi/dm/plover-1password
 [PyPI version image]: https://img.shields.io/pypi/v/plover-1password
