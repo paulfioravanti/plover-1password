@@ -164,7 +164,7 @@ make sure your local development environment also uses Python 3.9.x.
 
 ### Testing
 
-- [Pytest][] is used for testing in this plugin.
+- [Pytest][] with [pytest-asyncio][] are used for testing in this plugin.
 - [Coverage.py][] and [pytest-cov][] are used for test coverage, and to run
   coverage within Pytest
 - [Pylint][] is used for code quality
@@ -240,6 +240,7 @@ plover --script plover_plugins uninstall plover-1password
 [plugin]: https://plover.readthedocs.io/en/latest/plugins.html#types-of-plugins
 [Pylint]: https://github.com/pylint-dev/pylint
 [Pytest]: https://pytest.org/
+[pytest-asyncio]: https://github.com/pytest-dev/pytest-asyncio
 [pytest-cov]: https://github.com/pytest-dev/pytest-cov/
 [rate limits]: https://developer.1password.com/docs/service-accounts/rate-limits/#hourly-limits
 [secret reference]: https://developer.1password.com/docs/cli/secret-reference-syntax/
