@@ -23,7 +23,9 @@ jobs:
           python-version: 3.9
 
       - name: Install Test, Coverage, Lint, Type Checking Dependencies
-        run: pip install pytest pylint mypy coverage
+        run: |
+          pip install pytest pytest-mock pylint mypy coverage
+          pip install -e ".[test]"
 
       - name: Run Linter
         run: pylint plover_1password
