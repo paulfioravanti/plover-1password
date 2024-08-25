@@ -94,7 +94,7 @@ you will need to install it manually directly via URL with the following
 Python [pip][] command in order for the plugin to work properly:
 
 ```console
-pip install git+ssh://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
+python -m pip install git+ssh://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
 ```
 
 Unfortunately, PyPi does not allow [direct URL dependencies][] in projects, so
@@ -154,6 +154,9 @@ git clone git@github.com:paulfioravanti/plover-1password.git
 cd plover-1password
 ```
 
+If you are a [Tmuxinator][] user, you may find my [plover-1password project
+file][] of reference.
+
 ### Python Version
 
 Plover's Python environment currently uses version 3.9 (see Plover's
@@ -187,6 +190,14 @@ To get a HTML test coverage report:
 coverage run --module pytest
 coverage html
 open htmlcov/index.html
+```
+
+If you are a [`just`][] user, you may find the [`justfile`][] useful during
+development in running multiple test commands. You can run the following command
+from the project root directory:
+
+```console
+just --working-directory . --justfile test/justfile
 ```
 
 ### Deploying Changes
@@ -225,12 +236,15 @@ plover --script plover_plugins uninstall plover-1password
 [Get started with 1Password CLI]: https://developer.1password.com/docs/cli/get-started/
 [Git]: https://git-scm.com/
 [Invoke Plover from the command line]: https://github.com/openstenoproject/plover/wiki/Invoke-Plover-from-the-command-line
+[`just`]: https://github.com/casey/just
+[`justfile`]: ./test/justfile
 [linting image]: https://img.shields.io/badge/linting-pylint-yellowgreen
 [linting url]: https://github.com/pylint-dev/pylint
 [meta]: https://plover.readthedocs.io/en/latest/plugin-dev/metas.html
 [move or copy items]: https://support.1password.com/move-copy-items/
 [Mypy]: https://github.com/python/mypy
 [pip]: https://pip.pypa.io/en/stable/
+[plover-1password project file]: https://github.com/paulfioravanti/dotfiles/blob/master/tmuxinator/plover_1password.yml
 [PyPI]: https://pypi.org/
 [PyPI downloads image]:https://img.shields.io/pypi/dm/plover-1password
 [PyPI version image]: https://img.shields.io/pypi/v/plover-1password
@@ -247,4 +261,5 @@ plover --script plover_plugins uninstall plover-1password
 [secret references]: https://developer.1password.com/docs/cli/secret-reference-syntax/
 [Setup]: ./#Setup
 [syntax rules]: https://developer.1password.com/docs/cli/secret-reference-syntax/#syntax-rules
+[Tmuxinator]: https://github.com/tmuxinator/tmuxinator
 [`workflow_context.yml`]: https://github.com/openstenoproject/plover/blob/master/.github/workflows/ci/workflow_context.yml
