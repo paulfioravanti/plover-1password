@@ -31,7 +31,6 @@ jobs:
         run: |
           pip install pytest pytest-mock pytest-asyncio pylint mypy coverage
           pip install git+ssh://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
-          pip install -e ".[test]"
 
       - name: Run Linter
         run: pylint plover_1password
