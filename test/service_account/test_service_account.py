@@ -1,6 +1,9 @@
 import os
 import pytest
 
+# NOTE: All the monkeypatching needed for these tests resulted in needing
+# to run the tests directly on the token module, rather than the service_account
+# interface.
 from plover_1password.service_account import token
 
 class MockPopen:
@@ -12,7 +15,7 @@ class MockPopen:
 
 # NOTE: It does not seem to be possible to monkeypatch over an existing
 # $OP_SERVICE_ACCOUNT_TOKEN env var, so instead change the name of the env
-# var the get_token() function attempts to fetch to $TOKEN, and then mock
+# var the get_token() function attempts to fetch to be $TOKEN, and then mock
 # that value.  This will only then work when calling token.get_token(), and
 # not service_account.get_token(), so it's not possible to test from the
 # service_account interface.
