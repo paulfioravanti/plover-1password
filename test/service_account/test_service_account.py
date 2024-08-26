@@ -3,12 +3,23 @@ import pytest
 
 from plover_1password import service_account
 
-class MockPopen:
-    def __init__(self, return_value):
-        self._return_value = return_value
+@pytest.fixture()
+def mock_op_service_account_token(monkeypatch):
+    monkeypatch.setattr(
+        "plover_1password.service_account.token._TOKEN_ENV_VAR_NAME",
+        "MOCK_OP_SERVICE_ACCOUNT_TOKEN"
+    )
 
-    def read(self):
-        return self._return_value
+    def _method(token_value):
+        monkeypatch.setenv("MOCK_OP_SERVICE_ACCOUNT_TOKEN", token_value)
+
+    return _method
+
+@pytest.fixture()
+def mock_popen(mocker):
+    mock = mocker.Mock()
+    mocker.patch("os.popen", return_value=mock)
+    return mock
 
 # NOTE: It does not seem to be possible to monkeypatch over an existing
 # $OP_SERVICE_ACCOUNT_TOKEN env var, so instead change the name of the env
@@ -39,19 +50,16 @@ def test_blank_token_env_var_value(monkeypatch):
     ):
         service_account.get_token()
 
-def test_get_token_using_mac_or_linux(monkeypatch, mocker):
+def test_get_token_using_mac_or_linux(
+    monkeypatch,
+    mocker,
+    mock_op_service_account_token,
+    mock_popen
+):
+    mock_op_service_account_token("mac/linux token")
+    mock_popen.read.return_value = os.getenv("MOCK_OP_SERVICE_ACCOUNT_TOKEN")
     monkeypatch.setattr("platform.system", lambda: "Darwin")
-    monkeypatch.setattr(
-        "plover_1password.service_account.token._TOKEN_ENV_VAR_NAME",
-        "MOCK_OP_SERVICE_ACCOUNT_TOKEN"
-    )
-    monkeypatch.setenv("MOCK_OP_SERVICE_ACCOUNT_TOKEN", "mac/linux token")
     monkeypatch.setenv("SHELL", "bash")
-    monkeypatch.setattr(
-        os,
-        "popen",
-        lambda _: MockPopen(os.getenv("MOCK_OP_SERVICE_ACCOUNT_TOKEN"))
-    )
     spy = mocker.spy(os, "popen")
 
     assert service_account.get_token() == "mac/linux token"
@@ -59,18 +67,15 @@ def test_get_token_using_mac_or_linux(monkeypatch, mocker):
         "bash -ic 'echo $MOCK_OP_SERVICE_ACCOUNT_TOKEN'"
     )
 
-def test_get_token_using_windows(monkeypatch, mocker):
+def test_get_token_using_windows(
+    monkeypatch,
+    mocker,
+    mock_op_service_account_token,
+    mock_popen
+):
+    mock_op_service_account_token("windows token")
+    mock_popen.read.return_value = os.getenv("MOCK_OP_SERVICE_ACCOUNT_TOKEN")
     monkeypatch.setattr("platform.system", lambda: "Windows")
-    monkeypatch.setattr(
-        "plover_1password.service_account.token._TOKEN_ENV_VAR_NAME",
-        "MOCK_OP_SERVICE_ACCOUNT_TOKEN"
-    )
-    monkeypatch.setenv("MOCK_OP_SERVICE_ACCOUNT_TOKEN", "windows token")
-    monkeypatch.setattr(
-        os,
-        "popen",
-        lambda _: MockPopen(os.getenv("MOCK_OP_SERVICE_ACCOUNT_TOKEN"))
-    )
     spy = mocker.spy(os, "popen")
 
     assert service_account.get_token() == "windows token"
