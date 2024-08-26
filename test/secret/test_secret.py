@@ -1,21 +1,30 @@
 import pytest
-from unittest.mock import AsyncMock
 
 from plover_1password import secret
 
 
 @pytest.fixture()
 def mock_client(mocker):
-    async_mock = AsyncMock()
+    async_mock = mocker.AsyncMock()
     mocker.patch(
         "onepassword.client.Client.authenticate",
         return_value=async_mock
     )
     return async_mock
 
-# REF: https://stackoverflow.com/questions/8294618/define-a-lambda-expression-that-raises-an-exception
-def raise_(exc):
-    raise exc
+@pytest.fixture()
+def patch_client_authenticate_error(monkeypatch):
+    # REF: https://stackoverflow.com/questions/8294618/define-a-lambda-expression-that-raises-an-exception
+    def raise_(exc):
+        raise exc
+
+    def _method(message=""):
+        monkeypatch.setattr(
+            "onepassword.client.Client.authenticate",
+            lambda **kwargs: raise_(Exception(message))
+        )
+
+    return _method
 
 async def test_blank_secret_reference():
     with pytest.raises(
@@ -24,14 +33,13 @@ async def test_blank_secret_reference():
     ):
         await secret.resolve("service_account_token", "")
 
-async def test_service_account_token_invalid(monkeypatch):
-    monkeypatch.setattr(
-        "onepassword.client.Client.authenticate",
-        lambda *args, **kwargs: raise_(Exception(
+async def test_service_account_token_invalid(patch_client_authenticate_error):
+    patch_client_authenticate_error(
+        message=(
             "invalid service account token, please make sure you provide a "
             "valid service account token as parameter: service account "
             "deserialization failed, please create another token"
-        ))
+        )
     )
 
     with pytest.raises(
@@ -43,13 +51,14 @@ async def test_service_account_token_invalid(monkeypatch):
     ):
         await secret.resolve("service_account_token", "secret_reference")
 
-async def test_service_account_token_invalid_format(monkeypatch):
-    monkeypatch.setattr(
-        "onepassword.client.Client.authenticate",
-        lambda *args, **kwargs: raise_(Exception(
+async def test_service_account_token_invalid_format(
+    patch_client_authenticate_error
+):
+    patch_client_authenticate_error(
+        message=(
             "invalid user input: encountered the following errors: "
             "service account token had invalid format"
-        ))
+        )
     )
 
     with pytest.raises(
