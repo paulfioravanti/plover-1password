@@ -81,7 +81,8 @@ async def test_secret_reference_invalid_format(mock_client):
         ValueError,
         match=(
             "Secret Reference has invalid format. "
-            "URI must be \"op://<vault>/<item>/\\[section/\\]field\""
+            "URI must be \"op://<vault>/<item>/\\[section/\\]field\". "
+            "You provided secret_reference."
         )
     ):
         await secret.resolve("service_account_token", "secret_reference")
@@ -89,7 +90,8 @@ async def test_secret_reference_invalid_format(mock_client):
 async def test_secret_reference_missing_prefix(mock_client):
     mock_client.secrets.resolve.side_effect = Exception(
         "error resolving secret reference: "
-        "secret reference is not prefixed with \"op://\""
+        "secret reference is not prefixed with \"op://\". "
+        "You provided secret_reference."
     )
 
     with pytest.raises(
@@ -106,7 +108,7 @@ async def test_secret_reference_vault_not_found(mock_client):
 
     with pytest.raises(
         ValueError,
-        match="Vault specified in Secret Reference not found."
+        match="Vault specified not found in Secret Reference secret_reference."
     ):
         await secret.resolve("service_account_token", "secret_reference")
 
@@ -118,7 +120,7 @@ async def test_secret_reference_item_not_found(mock_client):
 
     with pytest.raises(
         ValueError,
-        match="Item specified in Secret Reference not found."
+        match="Item specified not found in Secret Reference secret_reference."
     ):
         await secret.resolve("service_account_token", "secret_reference")
 
@@ -130,7 +132,9 @@ async def test_secret_reference_section_not_found(mock_client):
 
     with pytest.raises(
         ValueError,
-        match="Section specified in Secret Reference not found."
+        match=(
+            "Section specified not found in Secret Reference secret_reference."
+        )
     ):
         await secret.resolve("service_account_token", "secret_reference")
 
@@ -142,7 +146,7 @@ async def test_secret_reference_field_not_found(mock_client):
 
     with pytest.raises(
         ValueError,
-        match="Field specified Secret Reference not found."
+        match="Field specified not found in Secret Reference secret_reference."
     ):
         await secret.resolve("service_account_token", "secret_reference")
 

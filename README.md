@@ -141,6 +141,26 @@ a "Plover" vault, within a "Personal" item, under a "Phone" section:
 "TPOEPB/TPOEPB": "{:1PASSWORD:op://Plover/Personal/Phone/Mobile}"
 ```
 
+If you are publishing or sharing your steno dictionaries publicly, and/or do not
+want to specify the names of your vaults or items etc in your outlines, you can
+define them instead within local environment variables on your computer, and
+the plugin will expand them inline:
+
+**macOS or Linux**
+
+```json
+"TPOEPB/TPOEPB": "{:1PASSWORD:op://$VAULT_NAME/$ITEM_NAME/$SECTION_NAME/Mobile}"
+```
+
+**Windows**
+
+```json
+"TPOEPB/TPOEPB": "{:1PASSWORD:op://$ENV:VAULT_NAME/$ENV:ITEM_NAME/$ENV:SECTION_NAME/Mobile}"
+```
+
+Given that the plugin is making a connection out to 1Password, it can take a few
+seconds before the secret value actually outputs (or you are shown an error).
+
 > [!NOTE]
 > Service account tokens are subject to [rate limits][] by 1Password, but they
 > should be more than enough for normal usage of this plugin.

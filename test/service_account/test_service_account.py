@@ -39,7 +39,7 @@ def test_non_existent_token_var_name_in_env(monkeypatch):
         ValueError,
         match="No value found for \\$MOCK_OP_SERVICE_ACCOUNT_TOKEN"
     ):
-        service_account.get_token()
+        service_account.get_token("Darwin", "bash")
 
 def test_blank_token_env_var_value(patch_op_service_account_token):
     patch_op_service_account_token(token_value="")
@@ -48,7 +48,7 @@ def test_blank_token_env_var_value(patch_op_service_account_token):
         ValueError,
         match="No value found for \\$MOCK_OP_SERVICE_ACCOUNT_TOKEN"
     ):
-        service_account.get_token()
+        service_account.get_token("Darwin", "bash")
 
 def test_get_token_using_mac_or_linux(
     monkeypatch,
@@ -59,11 +59,9 @@ def test_get_token_using_mac_or_linux(
     patch_op_service_account_token(token_value="mac/linux token")
     mock_popen_read(return_value="MOCK_OP_SERVICE_ACCOUNT_TOKEN")
 
-    monkeypatch.setattr("platform.system", lambda: "Darwin")
-    monkeypatch.setenv("SHELL", "bash")
     spy = mocker.spy(os, "popen")
 
-    assert service_account.get_token() == "mac/linux token"
+    assert service_account.get_token("Darwin", "bash") == "mac/linux token"
     spy.assert_called_once_with(
         "bash -ic 'echo $MOCK_OP_SERVICE_ACCOUNT_TOKEN'"
     )
@@ -77,8 +75,7 @@ def test_get_token_using_windows(
     patch_op_service_account_token(token_value="windows token")
     mock_popen_read(return_value="MOCK_OP_SERVICE_ACCOUNT_TOKEN")
 
-    monkeypatch.setattr("platform.system", lambda: "Windows")
     spy = mocker.spy(os, "popen")
 
-    assert service_account.get_token() == "windows token"
+    assert service_account.get_token("Windows", None) == "windows token"
     spy.assert_called_once_with("echo $ENV:MOCK_OP_SERVICE_ACCOUNT_TOKEN")

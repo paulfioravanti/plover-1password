@@ -38,7 +38,7 @@ _SECRET_REFERENCE_FIELD_NOT_FOUND_ERROR = (
     "the specified field cannot be found within the item"
 )
 
-def handle_ffi_error(exc: Exception) -> None:
+def handle_ffi_error(exc: Exception, secret_reference: str) -> None:
     """
     Handles errors generated from 1Password's ffi libraries and re-raises them
     with more plugin-relevant messages.
@@ -60,30 +60,36 @@ def handle_ffi_error(exc: Exception) -> None:
     if _SECRET_REFERENCE_INVALID_FORMAT_ERROR in error_message:
         raise ValueError(
             "Secret Reference has invalid format. "
-            "URI must be \"op://<vault>/<item>/[section/]field\""
+            "URI must be \"op://<vault>/<item>/[section/]field\". "
+            f"You provided {secret_reference}."
         ) from exc
 
     if _SECRET_REFERENCE_MISSING_PREFIX_ERROR in error_message:
         raise ValueError(
-            "Secret Reference needs to be prefixed with \"op://\""
+            "Secret Reference needs to be prefixed with \"op://\". "
+            f"You provided {secret_reference}."
         ) from exc
 
     if _SECRET_REFERENCE_VAULT_NOT_FOUND_ERROR in error_message:
         raise ValueError(
-            "Vault specified in Secret Reference not found."
+            "Vault specified not found in Secret Reference "
+            f"{secret_reference}."
         ) from exc
 
     if _SECRET_REFERENCE_ITEM_NOT_FOUND_ERROR in error_message:
         raise ValueError(
-            "Item specified in Secret Reference not found."
+            "Item specified not found in Secret Reference "
+            f"{secret_reference}."
         ) from exc
 
     if _SECRET_REFERENCE_SECTION_NOT_FOUND_ERROR in error_message:
         raise ValueError(
-            "Section specified in Secret Reference not found."
+            "Section specified not found in Secret Reference "
+            f"{secret_reference}."
         ) from exc
 
     if _SECRET_REFERENCE_FIELD_NOT_FOUND_ERROR in error_message:
         raise ValueError(
-            "Field specified Secret Reference not found."
+            "Field specified not found in Secret Reference "
+            f"{secret_reference}."
         ) from exc

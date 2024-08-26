@@ -21,7 +21,7 @@ async def resolve(service_account_token: str, secret_reference: str) -> str:
         client: Client = await _init_client(service_account_token)
         secret: str = await client.secrets.resolve(secret_reference)
     except Exception as exc: # pylint: disable=broad-except
-        error.handle_ffi_error(exc)
+        error.handle_ffi_error(exc, secret_reference)
         raise ValueError(str(exc)) from exc
 
     return secret
