@@ -247,7 +247,7 @@ plover --script plover_plugins uninstall plover-1password
 [pip]: https://pip.pypa.io/en/stable/
 [plover-1password project file]: https://github.com/paulfioravanti/dotfiles/blob/master/tmuxinator/plover_1password.yml
 [PyPI]: https://pypi.org/
-[PyPI downloads image]:https://img.shields.io/pypi/dm/plover-1password
+[PyPI downloads image]: https://img.shields.io/pypi/dm/plover-1password
 [PyPI version image]: https://img.shields.io/pypi/v/plover-1password
 [PyPI url]: https://pypi.org/project/plover-1password/
 [Plover]: https://www.openstenoproject.org/
