@@ -147,11 +147,12 @@ a "Plover" vault, within a "Personal" item, under a "Phone" section:
 
 ## Development
 
-Clone from GitHub with [git][]:
+Clone from GitHub with [git][] and install test-related dependencies:
 
 ```console
 git clone git@github.com:paulfioravanti/plover-1password.git
 cd plover-1password
+python -m pip install --editable ".[test]"
 ```
 
 If you are a [Tmuxinator][] user, you may find my [plover-1password project
