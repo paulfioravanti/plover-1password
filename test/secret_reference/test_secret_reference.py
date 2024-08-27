@@ -5,7 +5,7 @@ from plover_1password import secret_reference
 
 
 # NOTE: Given that the command passed in to `os.popen` will be different
-# between Windows and non-Windows...
+# between Windows and non-Windows:
 #
 # `echo $ExecutionContext.InvokeCommand.ExpandString(op://$ENV:VAULT_NAME/$ENV:ITEM_NAME/$ENV:SECTION_NAME/Mobile)`
 #
@@ -13,10 +13,10 @@ from plover_1password import secret_reference
 #
 # `bash -ic 'echo op://$VAULT_NAME/$ITEM_NAME/$SECTION_NAME/Mobile'`
 #
-# ...this version of the mock (compared to the one in
-# `test_service_account.py`), handwaves over how that command works and what it
-# returns, and instead just gives back a specified `return_value` that we're
-# reasonably sure we're expecting.
+# This version of the mock (compared to the one in `test_service_account.py`),
+# handwaves over how that command works, and what it returns, and instead just
+# gives back a the `return_value` passed in that we're reasonably sure we're
+# expecting back from `os.popen.read`.
 @pytest.fixture()
 def mock_popen_read(mocker):
     mock = mocker.Mock()

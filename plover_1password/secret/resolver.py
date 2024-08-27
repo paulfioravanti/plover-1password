@@ -10,23 +10,10 @@ from . import error
 
 _INTEGRATION_NAME = "Plover integration"
 
-async def resolve(service_account_token: str, secret_reference: str) -> str:
+async def init_client(service_account_token: str) -> Client:
     """
-    Resolves a single secret from a secret reference URI.
+    Initialises a 1Password client to retrieve secrets.
     """
-    if not secret_reference:
-        raise ValueError("Secret Reference cannot be blank")
-
-    try:
-        client: Client = await _init_client(service_account_token)
-        secret: str = await client.secrets.resolve(secret_reference)
-    except Exception as exc: # pylint: disable=broad-except
-        error.handle_ffi_error(exc, secret_reference)
-        raise ValueError(str(exc)) from exc
-
-    return secret
-
-async def _init_client(service_account_token: str) -> Client:
     client: Client = await Client.authenticate(
         auth=service_account_token,
         integration_name=_INTEGRATION_NAME,
@@ -34,3 +21,18 @@ async def _init_client(service_account_token: str) -> Client:
     )
 
     return client
+
+async def resolve(client: Client, secret_reference: str) -> str:
+    """
+    Resolves a single secret from a secret reference URI.
+    """
+    if not secret_reference:
+        raise ValueError("Secret Reference cannot be blank")
+
+    try:
+        secret: str = await client.secrets.resolve(secret_reference)
+    except Exception as exc: # pylint: disable=broad-except
+        error.handle_ffi_error(exc, secret_reference)
+        raise ValueError(str(exc)) from exc
+
+    return secret

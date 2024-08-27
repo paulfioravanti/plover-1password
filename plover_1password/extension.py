@@ -16,6 +16,8 @@ from plover.formatting import (
 )
 from plover.registry import registry
 
+from onepassword.client import Client
+
 from . import (
     service_account,
     secret,
@@ -30,8 +32,8 @@ class OnePassword:
     Extension class that also registers a meta plugin.
     The meta deals with retrieving secrets from 1Password
     """
+    _client: Client
     _engine: StenoEngine
-    _service_account_token: str
     _shell: Optional[str]
     _system: str
 
@@ -45,9 +47,12 @@ class OnePassword:
         self._system = platform.system()
         if self._system != "Windows":
             self._shell = os.getenv("SHELL", _DEFAULT_SHELL).split("/")[-1]
-        self._service_account_token = service_account.get_token(
+        service_account_token = service_account.get_token(
             self._system,
             self._shell
+        )
+        self._client = asyncio.run(
+            secret.init_client(service_account_token)
         )
         registry.register_plugin(
             "meta",
@@ -73,7 +78,7 @@ class OnePassword:
             argument
         )
         secret_value: str = await secret.resolve(
-            self._service_account_token,
+            self._client,
             op_secret_reference
         )
 

@@ -10,36 +10,40 @@ def mock_client(mocker):
         "onepassword.client.Client.authenticate",
         return_value=async_mock
     )
-    return async_mock
 
-@pytest.fixture()
-def patch_client_authenticate_error(monkeypatch):
-    # REF: https://stackoverflow.com/questions/8294618/define-a-lambda-expression-that-raises-an-exception
+    # REF: https://stackoverflow.com/a/8294654/567863
     def raise_(exc):
         raise exc
 
-    def _method(message=""):
-        monkeypatch.setattr(
-            "onepassword.client.Client.authenticate",
-            lambda **kwargs: raise_(Exception(message))
-        )
+    # REF: https://stackoverflow.com/a/44701916/567863
+    def _method(error_message="", return_value=None):
+        if error_message:
+            async_mock.secrets.resolve.side_effect = (
+                lambda _return_value: raise_(Exception(error_message))
+            )
+
+        if return_value:
+            async_mock.secrets.resolve.return_value = return_value
+
+        return async_mock
 
     return _method
 
-async def test_blank_secret_reference():
+async def test_initialising_a_client(mock_client):
+    assert await secret.init_client("service_account_token") == mock_client()
+
+async def test_blank_secret_reference(mock_client):
     with pytest.raises(
         ValueError,
         match="Secret Reference cannot be blank"
     ):
-        await secret.resolve("service_account_token", "")
+        await secret.resolve(mock_client, "")
 
-async def test_service_account_token_invalid(patch_client_authenticate_error):
-    patch_client_authenticate_error(
-        message=(
-            "invalid service account token, please make sure you provide a "
-            "valid service account token as parameter: service account "
-            "deserialization failed, please create another token"
-        )
+async def test_service_account_token_invalid(mock_client):
+    error_message = (
+        "invalid service account token, please make sure you provide a "
+        "valid service account token as parameter: service account "
+        "deserialization failed, please create another token"
     )
 
     with pytest.raises(
@@ -49,16 +53,15 @@ async def test_service_account_token_invalid(patch_client_authenticate_error):
             "Create another token and restart Plover."
         )
     ):
-        await secret.resolve("service_account_token", "secret_reference")
-
-async def test_service_account_token_invalid_format(
-    patch_client_authenticate_error
-):
-    patch_client_authenticate_error(
-        message=(
-            "invalid user input: encountered the following errors: "
-            "service account token had invalid format"
+        await secret.resolve(
+            mock_client(error_message=error_message),
+            "secret_reference"
         )
+
+async def test_service_account_token_invalid_format(mock_client):
+    error_message = (
+        "invalid user input: encountered the following errors: "
+        "service account token had invalid format"
     )
 
     with pytest.raises(
@@ -68,10 +71,13 @@ async def test_service_account_token_invalid_format(
             "Fix token format or create a new one and restart Plover."
         )
     ):
-        await secret.resolve("service_account_token", "secret_reference")
+        await secret.resolve(
+            mock_client(error_message=error_message),
+            "secret_reference"
+        )
 
 async def test_secret_reference_invalid_format(mock_client):
-    mock_client.secrets.resolve.side_effect = Exception(
+    error_message = (
         "error resolving secret reference: "
         "secret reference has invalid format - "
         "must be \"op://<vault>/<item>/[section/]field\""
@@ -85,10 +91,13 @@ async def test_secret_reference_invalid_format(mock_client):
             "You provided secret_reference."
         )
     ):
-        await secret.resolve("service_account_token", "secret_reference")
+        await secret.resolve(
+            mock_client(error_message=error_message),
+            "secret_reference"
+        )
 
 async def test_secret_reference_missing_prefix(mock_client):
-    mock_client.secrets.resolve.side_effect = Exception(
+    error_message = (
         "error resolving secret reference: "
         "secret reference is not prefixed with \"op://\". "
         "You provided secret_reference."
@@ -98,10 +107,13 @@ async def test_secret_reference_missing_prefix(mock_client):
         ValueError,
         match="Secret Reference needs to be prefixed with \"op://\""
     ):
-        await secret.resolve("service_account_token", "secret_reference")
+        await secret.resolve(
+            mock_client(error_message=error_message),
+            "secret_reference"
+        )
 
 async def test_secret_reference_vault_not_found(mock_client):
-    mock_client.secrets.resolve.side_effect = Exception(
+    error_message = (
         "error resolving secret reference: "
         "no vault matched the secret reference query"
     )
@@ -110,10 +122,13 @@ async def test_secret_reference_vault_not_found(mock_client):
         ValueError,
         match="Vault specified not found in Secret Reference secret_reference."
     ):
-        await secret.resolve("service_account_token", "secret_reference")
+        await secret.resolve(
+            mock_client(error_message=error_message),
+            "secret_reference"
+        )
 
 async def test_secret_reference_item_not_found(mock_client):
-    mock_client.secrets.resolve.side_effect = Exception(
+    error_message = (
         "error resolving secret reference: "
         "no item matched the secret reference query"
     )
@@ -122,10 +137,13 @@ async def test_secret_reference_item_not_found(mock_client):
         ValueError,
         match="Item specified not found in Secret Reference secret_reference."
     ):
-        await secret.resolve("service_account_token", "secret_reference")
+        await secret.resolve(
+            mock_client(error_message=error_message),
+            "secret_reference"
+        )
 
 async def test_secret_reference_section_not_found(mock_client):
-    mock_client.secrets.resolve.side_effect = Exception(
+    error_message = (
         "error resolving secret reference: "
         "no section matched the secret reference query"
     )
@@ -136,10 +154,13 @@ async def test_secret_reference_section_not_found(mock_client):
             "Section specified not found in Secret Reference secret_reference."
         )
     ):
-        await secret.resolve("service_account_token", "secret_reference")
+        await secret.resolve(
+            mock_client(error_message=error_message),
+            "secret_reference"
+        )
 
 async def test_secret_reference_field_not_found(mock_client):
-    mock_client.secrets.resolve.side_effect = Exception(
+    error_message = (
         "error resolving secret reference: "
         "the specified field cannot be found within the item"
     )
@@ -148,17 +169,20 @@ async def test_secret_reference_field_not_found(mock_client):
         ValueError,
         match="Field specified not found in Secret Reference secret_reference."
     ):
-        await secret.resolve("service_account_token", "secret_reference")
+        await secret.resolve(
+            mock_client(error_message=error_message),
+            "secret_reference"
+        )
 
 async def test_unexpected_exception(mock_client):
-    mock_client.secrets.resolve.side_effect = Exception("Some exception")
-
     with pytest.raises(ValueError, match="Some exception"):
-        await secret.resolve("service_account_token", "secret_reference")
+        await secret.resolve(
+            mock_client(error_message="Some exception"), "secret_reference"
+        )
 
 async def test_successful_secret_retrieval(mock_client):
-    mock_client.secrets.resolve.return_value = "secret"
     remote_secret = await secret.resolve(
-        "service_account_token", "secret_reference"
+        mock_client(return_value="secret"),
+        "secret_reference"
     )
     assert remote_secret == "secret"
