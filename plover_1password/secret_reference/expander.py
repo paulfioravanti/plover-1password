@@ -12,11 +12,7 @@ _POWERSHELL_COMMAND: str = (
 )
 _SHELL_COMMAND: str = "{0} -ic 'echo {1}'"
 
-def expand_env_vars(
-    system: str,
-    shell: Optional[str],
-    secret_reference: str
-) -> str:
+def expand_env_vars(shell: Optional[str], secret_reference: str) -> str:
     """
     Expands env vars in a secret reference. Returns immediately if no env vars
     contained in secret reference string.
@@ -25,10 +21,10 @@ def expand_env_vars(
         return secret_reference
 
     command: str
-    if system == "Windows":
-        command = _POWERSHELL_COMMAND.format(secret_reference)
-    else:
+    if shell:
         command = _SHELL_COMMAND.format(shell, secret_reference)
+    else:
+        command = _POWERSHELL_COMMAND.format(secret_reference)
 
     expanded: str = os.popen(command).read().strip()
 

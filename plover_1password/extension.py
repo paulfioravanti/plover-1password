@@ -35,7 +35,6 @@ class OnePassword:
     _client: Client
     _engine: StenoEngine
     _shell: Optional[str]
-    _system: str
 
     def __init__(self, engine: StenoEngine) -> None:
         self._engine = engine
@@ -44,13 +43,9 @@ class OnePassword:
         """
         Sets up the meta plugin and service account token.
         """
-        self._system = platform.system()
-        if self._system != "Windows":
+        if platform.system() in ["Darwin", "Linux"]:
             self._shell = os.getenv("SHELL", _DEFAULT_SHELL).split("/")[-1]
-        service_account_token = service_account.get_token(
-            self._system,
-            self._shell
-        )
+        service_account_token = service_account.get_token(self._shell)
         # The SDK client "sets up an authenticated session with the 1Password
         # servers and automatically refreshes it whenever it expires", so it
         # should hopefully be okay to locally cache a single client instance
@@ -79,7 +74,6 @@ class OnePassword:
         in as an argument in the steno outline, and outputs it.
         """
         op_secret_reference: str = secret_reference.expand_env_vars(
-            self._system,
             self._shell,
             argument
         )

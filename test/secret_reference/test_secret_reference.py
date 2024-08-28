@@ -30,7 +30,6 @@ def mock_popen_read(mocker):
 def test_no_env_vars_in_secret_reference():
     assert(
         secret_reference.expand_env_vars(
-            "Darwin",
             "bash",
             "op://Plover/Personal/Phone/Mobile"
         ) == "op://Plover/Personal/Phone/Mobile"
@@ -42,7 +41,6 @@ def test_expand_secret_reference_using_mac_or_linux(mock_popen_read, mocker):
 
     assert(
         secret_reference.expand_env_vars(
-            "Darwin",
             "bash",
             "op://$VAULT_NAME/$ITEM_NAME/$SECTION_NAME/Mobile"
         ) == "op://Plover/Personal/Phone/Mobile"
@@ -57,8 +55,7 @@ def test_expand_secret_reference_using_windows(mock_popen_read, mocker):
 
     assert (
         secret_reference.expand_env_vars(
-            "Windows",
-            "bash",
+            None,
             "op://$ENV:VAULT_NAME/$ENV:ITEM_NAME/$ENV:SECTION_NAME/Mobile"
         )
     ) == "op://Plover/Personal/Phone/Mobile"
