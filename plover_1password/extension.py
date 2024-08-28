@@ -51,6 +51,12 @@ class OnePassword:
             self._system,
             self._shell
         )
+        # The SDK client "sets up an authenticated session with the 1Password
+        # servers and automatically refreshes it whenever it expires", so it
+        # should hopefully be okay to locally cache a single client instance
+        # here to handle all connections rather than create a new one on every
+        # connection.
+        # REF: https://developer.1password.com/docs/sdks/concepts/#state-management
         self._client = asyncio.run(
             secret.init_client(service_account_token)
         )
