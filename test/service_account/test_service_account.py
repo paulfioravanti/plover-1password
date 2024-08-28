@@ -51,10 +51,9 @@ def test_blank_token_env_var_value(patch_op_service_account_token):
         service_account.get_token("Darwin", "bash")
 
 def test_get_token_using_mac_or_linux(
-    monkeypatch,
     mocker,
-    mock_popen_read,
-    patch_op_service_account_token
+    patch_op_service_account_token,
+    mock_popen_read
 ):
     patch_op_service_account_token(token_value="mac/linux token")
     mock_popen_read(return_value="MOCK_OP_SERVICE_ACCOUNT_TOKEN")
@@ -67,10 +66,9 @@ def test_get_token_using_mac_or_linux(
     )
 
 def test_get_token_using_windows(
-    monkeypatch,
     mocker,
-    mock_popen_read,
     patch_op_service_account_token,
+    mock_popen_read
 ):
     patch_op_service_account_token(token_value="windows token")
     mock_popen_read(return_value="MOCK_OP_SERVICE_ACCOUNT_TOKEN")

@@ -36,7 +36,7 @@ def test_no_env_vars_in_secret_reference():
         ) == "op://Plover/Personal/Phone/Mobile"
     )
 
-def test_expand_secret_reference_using_mac_or_linux(mocker, mock_popen_read):
+def test_expand_secret_reference_using_mac_or_linux(mock_popen_read, mocker):
     mock_popen_read(return_value="op://Plover/Personal/Phone/Mobile")
     spy = mocker.spy(os, "popen")
 
@@ -51,7 +51,7 @@ def test_expand_secret_reference_using_mac_or_linux(mocker, mock_popen_read):
         "bash -ic 'echo op://$VAULT_NAME/$ITEM_NAME/$SECTION_NAME/Mobile'"
     )
 
-def test_expand_secret_reference_using_windows(mocker, mock_popen_read):
+def test_expand_secret_reference_using_windows(mock_popen_read, mocker):
     mock_popen_read(return_value="op://Plover/Personal/Phone/Mobile")
     spy = mocker.spy(os, "popen")
 
