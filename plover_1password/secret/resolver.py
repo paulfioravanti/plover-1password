@@ -8,7 +8,7 @@ from ..__version__ import __version__
 from . import error
 
 
-_INTEGRATION_NAME = "Plover integration"
+_INTEGRATION_NAME: str = "Plover integration"
 
 async def init_client(service_account_token: str) -> Client:
     """

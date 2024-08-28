@@ -6,9 +6,11 @@ import os
 from typing import Optional
 
 
-_ENV_VAR_SYNTAX = "$"
-_POWERSHELL_COMMAND = "echo $ExecutionContext.InvokeCommand.ExpandString({0})"
-_SHELL_COMMAND = "{0} -ic 'echo {1}'"
+_ENV_VAR_SYNTAX: str = "$"
+_POWERSHELL_COMMAND: str = (
+    "echo $ExecutionContext.InvokeCommand.ExpandString({0})"
+)
+_SHELL_COMMAND: str = "{0} -ic 'echo {1}'"
 
 def expand_env_vars(
     system: str,

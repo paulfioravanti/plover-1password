@@ -25,7 +25,7 @@ from . import (
 )
 
 
-_DEFAULT_SHELL = "bash"
+_DEFAULT_SHELL: str = "bash"
 
 class OnePassword:
     """

@@ -3,37 +3,37 @@ Module to handle errors raised from 1Password's uniffi_core C shared libraries
 but not handled in the Python SDK.
 See: https://github.com/1Password/onepassword-sdk-python/tree/main/src/onepassword/lib
 """
-_SERVICE_ACCOUNT_TOKEN_INVALID_ERROR = (
+_SERVICE_ACCOUNT_TOKEN_INVALID_ERROR: str = (
     "invalid service account token, please make sure you provide a valid "
     "service account token as parameter: service account deserialization "
     "failed, please create another token"
 )
-_SERVICE_ACCOUNT_TOKEN_INVALID_FORMAT_ERROR = (
+_SERVICE_ACCOUNT_TOKEN_INVALID_FORMAT_ERROR: str = (
     "invalid user input: encountered the following errors: "
     "service account token had invalid format"
 )
-_SECRET_REFERENCE_INVALID_FORMAT_ERROR = (
+_SECRET_REFERENCE_INVALID_FORMAT_ERROR: str = (
     "error resolving secret reference: "
     "secret reference has invalid format - "
     "must be \"op://<vault>/<item>/[section/]field\""
 )
-_SECRET_REFERENCE_MISSING_PREFIX_ERROR = (
+_SECRET_REFERENCE_MISSING_PREFIX_ERROR: str = (
     "error resolving secret reference: "
     "secret reference is not prefixed with \"op://\""
 )
-_SECRET_REFERENCE_VAULT_NOT_FOUND_ERROR = (
+_SECRET_REFERENCE_VAULT_NOT_FOUND_ERROR: str = (
     "error resolving secret reference: "
     "no vault matched the secret reference query"
 )
-_SECRET_REFERENCE_ITEM_NOT_FOUND_ERROR = (
+_SECRET_REFERENCE_ITEM_NOT_FOUND_ERROR: str = (
     "error resolving secret reference: "
     "no item matched the secret reference query"
 )
-_SECRET_REFERENCE_SECTION_NOT_FOUND_ERROR = (
+_SECRET_REFERENCE_SECTION_NOT_FOUND_ERROR: str = (
     "error resolving secret reference: "
     "no section matched the secret reference query"
 )
-_SECRET_REFERENCE_FIELD_NOT_FOUND_ERROR = (
+_SECRET_REFERENCE_FIELD_NOT_FOUND_ERROR: str = (
     "error resolving secret reference: "
     "the specified field cannot be found within the item"
 )
