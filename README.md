@@ -104,6 +104,8 @@ in order to get this plugin on to PyPI, the SDK could not be listed as an
 meaning a manual installation process instead of the plugin automatically doing
 it for you.
 
+Currently, [this GitHub issue][] is tracking adding the SDK to PyPI.
+
 ### Install 1Password CLI and turn on desktop app integration
 
 Follow all the steps to [Get started with 1Password CLI][] to install the
@@ -282,5 +284,6 @@ plover --script plover_plugins uninstall plover-1password
 [secret references]: https://developer.1password.com/docs/cli/secret-reference-syntax/
 [Setup]: ./#Setup
 [syntax rules]: https://developer.1password.com/docs/cli/secret-reference-syntax/#syntax-rules
+[this GitHub issue]: https://github.com/1Password/onepassword-sdk-python/issues/107
 [Tmuxinator]: https://github.com/tmuxinator/tmuxinator
 [`workflow_context.yml`]: https://github.com/openstenoproject/plover/blob/master/.github/workflows/ci/workflow_context.yml
