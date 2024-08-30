@@ -4,23 +4,8 @@ in a vault.
 """
 from onepassword.client import Client
 
-from ..__version__ import __version__
 from . import error
 
-
-_INTEGRATION_NAME: str = "Plover integration"
-
-async def init_client(service_account_token: str) -> Client:
-    """
-    Initialises a 1Password client to retrieve secrets.
-    """
-    client: Client = await Client.authenticate(
-        auth=service_account_token,
-        integration_name=_INTEGRATION_NAME,
-        integration_version=__version__
-    )
-
-    return client
 
 async def resolve(client: Client, secret_reference: str) -> str:
     """

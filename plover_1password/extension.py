@@ -5,7 +5,6 @@ Plover entry point extension module for Plover 1Password
     - https://plover.readthedocs.io/en/latest/plugin-dev/meta.html
 """
 import asyncio
-import os
 import platform
 from typing import Callable
 
@@ -21,20 +20,10 @@ from onepassword.client import Client
 from . import (
     service_account,
     secret,
-    secret_reference
+    secret_reference,
+    shell_command
 )
 
-
-_DEFAULT_SHELL: str = "bash"
-_POWERSHELL_COMMAND: Callable[[str], str] = lambda env_var: (
-    f"echo $ExecutionContext.InvokeCommand.ExpandString({env_var})"
-)
-# NOTE: Using an interactive mode command (bash/zsh/fish -ic) seemed to be
-# the only way to access a user's env vars on a Mac outside Plover's
-# environment.
-_SHELL_COMMAND: Callable[[str], Callable[[str], str]] = lambda shell: (
-    lambda env_var: f"{shell} -ic 'echo {env_var}'"
-)
 
 class OnePassword:
     """
@@ -54,7 +43,7 @@ class OnePassword:
         Sets up the meta plugin and service account token.
         """
         self._platform = platform.system()
-        self._shell_command = self._determine_platform_command()
+        self._shell_command = shell_command.resolve(self._platform)
         service_account_token = service_account.get_token(
             self._platform,
             self._shell_command
@@ -80,14 +69,6 @@ class OnePassword:
         """
         Stops the plugin -- no custom action needed.
         """
-
-    def _determine_platform_command(self) -> Callable[[str], str]:
-        if self._platform == "Windows":
-            return _POWERSHELL_COMMAND
-
-        return _SHELL_COMMAND(
-            os.getenv("SHELL", _DEFAULT_SHELL).split("/")[-1]
-        )
 
     async def _one_password(self, ctx: _Context, argument: str) -> _Action:
         """
