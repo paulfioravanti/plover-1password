@@ -7,7 +7,7 @@ Plover entry point extension module for Plover 1Password
 import asyncio
 import os
 import platform
-from typing import Optional
+from typing import Callable
 
 from plover.engine import StenoEngine
 from plover.formatting import (
@@ -26,6 +26,15 @@ from . import (
 
 
 _DEFAULT_SHELL: str = "bash"
+_POWERSHELL_COMMAND: Callable[[str], str] = lambda env_var: (
+    f"echo $ExecutionContext.InvokeCommand.ExpandString({env_var})"
+)
+# NOTE: Using an interactive mode command (bash/zsh/fish -ic) seemed to be
+# the only way to access a user's env vars on a Mac outside Plover's
+# environment.
+_SHELL_COMMAND: Callable[[str], Callable[[str], str]] = lambda shell: (
+    lambda env_var: f"{shell} -ic 'echo {env_var}'"
+)
 
 class OnePassword:
     """
@@ -34,7 +43,8 @@ class OnePassword:
     """
     _client: Client
     _engine: StenoEngine
-    _shell: Optional[str]
+    _platform: str
+    _shell_command: Callable[[str], str]
 
     def __init__(self, engine: StenoEngine) -> None:
         self._engine = engine
@@ -43,9 +53,12 @@ class OnePassword:
         """
         Sets up the meta plugin and service account token.
         """
-        if platform.system() in ["Darwin", "Linux"]:
-            self._shell = os.getenv("SHELL", _DEFAULT_SHELL).split("/")[-1]
-        service_account_token = service_account.get_token(self._shell)
+        self._platform = platform.system()
+        self._shell_command = self._determine_platform_command()
+        service_account_token = service_account.get_token(
+            self._platform,
+            self._shell_command
+        )
         # The SDK client "sets up an authenticated session with the 1Password
         # servers and automatically refreshes it whenever it expires", so it
         # should hopefully be okay to locally cache a single client instance
@@ -68,13 +81,21 @@ class OnePassword:
         Stops the plugin -- no custom action needed.
         """
 
+    def _determine_platform_command(self) -> Callable[[str], str]:
+        if self._platform == "Windows":
+            return _POWERSHELL_COMMAND
+
+        return _SHELL_COMMAND(
+            os.getenv("SHELL", _DEFAULT_SHELL).split("/")[-1]
+        )
+
     async def _one_password(self, ctx: _Context, argument: str) -> _Action:
         """
         Retrieves a secret from 1Password based on the secret reference passed
         in as an argument in the steno outline, and outputs it.
         """
         op_secret_reference: str = secret_reference.expand_env_vars(
-            self._shell,
+            self._shell_command,
             argument
         )
         secret_value: str = await secret.resolve(
