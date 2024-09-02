@@ -1,2 +1,6 @@
 [MAIN]
-ignored-modules=plover.engine,plover.formatting,plover.registry,onepassword.client
+ignored-modules =
+    onepassword.client
+    plover.engine
+    plover.formatting
+    plover.registry
