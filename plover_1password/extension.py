@@ -18,9 +18,9 @@ from plover.registry import registry
 from onepassword.client import Client
 
 from . import (
-    service_account,
     secret,
     secret_reference,
+    service_account,
     shell_command
 )
 

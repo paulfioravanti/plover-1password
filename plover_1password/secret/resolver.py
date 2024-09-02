@@ -18,6 +18,6 @@ async def resolve(client: Client, secret_reference: str) -> str:
         secret: str = await client.secrets.resolve(secret_reference)
     except Exception as exc: # pylint: disable=broad-except
         error.handle_ffi_error(exc, secret_reference)
-        raise ValueError(str(exc)) from exc
+        raise ValueError(exc) from exc
 
     return secret
