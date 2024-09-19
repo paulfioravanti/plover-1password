@@ -8,8 +8,9 @@ from typing import (
     Optional
 )
 
-_POWERSHELL_TOKEN_ENV_VAR_NAME: str = "$ENV:OP_SERVICE_ACCOUNT_TOKEN"
-_SHELL_TOKEN_ENV_VAR_NAME: str = "$OP_SERVICE_ACCOUNT_TOKEN"
+_TOKEN_ENV_VAR_NAME: str = "OP_SERVICE_ACCOUNT_TOKEN"
+_POWERSHELL_TOKEN_ENV_VAR_NAME: str = f"$ENV:{_TOKEN_ENV_VAR_NAME}"
+_SHELL_TOKEN_ENV_VAR_NAME: str = f"${_TOKEN_ENV_VAR_NAME}"
 
 def get_token(platform: str, shell_command: Callable[[str], str]) -> str:
     """

@@ -16,7 +16,7 @@ def expand_env_vars(
     Expands env vars in a secret reference. Returns immediately if no env vars
     contained in secret reference string.
     """
-    if not _ENV_VAR_SYNTAX in secret_reference:
+    if _ENV_VAR_SYNTAX not in secret_reference:
         return secret_reference
 
     command: str = shell_command(secret_reference)

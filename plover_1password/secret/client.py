@@ -12,10 +12,10 @@ async def init_client(service_account_token: str) -> Client:
     """
     Initialises a 1Password client to retrieve secrets.
     """
-    client: Client = await Client.authenticate(
-        auth=service_account_token,
-        integration_name=_INTEGRATION_NAME,
-        integration_version=__version__
+    return (
+        await Client.authenticate(
+            auth=service_account_token,
+            integration_name=_INTEGRATION_NAME,
+            integration_version=__version__
+        )
     )
-
-    return client
