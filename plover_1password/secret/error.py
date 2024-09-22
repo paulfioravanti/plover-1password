@@ -3,6 +3,7 @@ Module to handle errors raised from 1Password's uniffi_core C shared libraries
 but not handled in the Python SDK.
 See: https://github.com/1Password/onepassword-sdk-python/tree/main/src/onepassword/lib
 """
+
 _SERVICE_ACCOUNT_TOKEN_INVALID_ERROR: str = (
     "invalid service account token, please make sure you provide a valid "
     "service account token as parameter: service account deserialization "

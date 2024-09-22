@@ -2,6 +2,7 @@
 Module to resolve a given 1Password secret reference URI to a secret contained
 in a vault.
 """
+
 from onepassword.client import Client
 
 from . import error

@@ -1,6 +1,7 @@
 """
 Module to initialise a 1Password client
 """
+
 from onepassword.client import Client
 
 from ..__version__ import __version__

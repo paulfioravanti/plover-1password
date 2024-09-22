@@ -2,6 +2,7 @@
 Resolver - a module for resolving the platform-appropriate command to fetch
 environment variables.
 """
+
 import os
 from typing import Callable
 

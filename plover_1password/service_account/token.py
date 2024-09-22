@@ -2,6 +2,7 @@
 Token - Module concerning retrieving a token value for a 1Password Service
 Account
 """
+
 import os
 from typing import (
     Callable,

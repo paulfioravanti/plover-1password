@@ -3,12 +3,6 @@ import pytest
 
 from plover_1password import shell_command
 
-@pytest.fixture()
-def bash_command():
-    def _method(shell):
-        return lambda env_var: f"{shell} -ic 'echo {env_var}'"
-
-    return _method
 
 def test_resolve_shell_command_for_windows(powershell_command):
     # REF: https://stackoverflow.com/a/20059029/567863

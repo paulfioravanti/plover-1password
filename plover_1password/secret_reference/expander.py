@@ -2,6 +2,7 @@
 Expander - a module for dealing with expansion of ENV vars in a secret
 reference URI.
 """
+
 import os
 from typing import Callable
 

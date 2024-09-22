@@ -4,6 +4,7 @@ Plover entry point extension module for Plover 1Password
     - https://plover.readthedocs.io/en/latest/plugin-dev/extensions.html
     - https://plover.readthedocs.io/en/latest/plugin-dev/meta.html
 """
+
 import asyncio
 import platform
 from typing import Callable
@@ -30,6 +31,7 @@ class OnePassword:
     Extension class that also registers a meta plugin.
     The meta deals with retrieving secrets from 1Password
     """
+
     _client: Client
     _engine: StenoEngine
     _platform: str
