@@ -4,7 +4,7 @@ import pytest
 # NOTE: Given that the command passed in to `os.popen` will be different
 # between Windows and non-Windows:
 #
-# `echo $ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)`
+# `powershell -command "$ExecutionContext.InvokeCommand.ExpandString($ENV:FOO)"`
 #
 # vs
 #
@@ -30,5 +30,6 @@ def bash_command():
 @pytest.fixture()
 def powershell_command():
     return lambda env_var: (
-        f"echo $ExecutionContext.InvokeCommand.ExpandString({env_var})"
+        "powershell -command "
+        f"\"$ExecutionContext.InvokeCommand.ExpandString({env_var})\""
     )

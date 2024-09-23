@@ -45,6 +45,7 @@ def test_expand_secret_reference_using_windows(
         )
     ) == "op://Plover/Personal/Phone/Mobile"
     spy.assert_called_once_with(
-        "echo $ExecutionContext.InvokeCommand.ExpandString("
-        "op://$ENV:VAULT_NAME/$ENV:ITEM_NAME/$ENV:SECTION_NAME/Mobile)"
+        "powershell -command "
+        "\"$ExecutionContext.InvokeCommand.ExpandString("
+        "op://$ENV:VAULT_NAME/$ENV:ITEM_NAME/$ENV:SECTION_NAME/Mobile)\""
     )
