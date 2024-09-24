@@ -6,7 +6,9 @@ A package dealing with:
 """
 
 __all__ = [
-    "resolve"
+    "resolve",
+    "run"
 ]
 
 from .resolver import resolve
+from .runner import run
