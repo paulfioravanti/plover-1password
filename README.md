@@ -70,7 +70,7 @@ you will need to install it manually directly via URL with the following
 Python [pip][] command in order for the plugin to work properly:
 
 ```console
-python -m pip install git+ssh://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
+python -m pip install git+https://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
 ```
 
 Unfortunately, PyPi does not allow [direct URL dependencies][] in projects, so
