@@ -17,11 +17,6 @@ jobs:
       - name: Clone Repository
         uses: actions/checkout@v3
 
-      - name: Load SSH key into GitHub for 1Password Python SDK install
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.PLOVER_1PASSWORD_PRIVATE_KEY }}
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -30,7 +25,7 @@ jobs:
       - name: Install Test, Coverage, Lint, Type Checking Dependencies
         run: |
           python -m pip install --editable ".[test]"
-          python -m pip install git+ssh://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
+          python -m pip install git+https://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
 
       - name: Run Linter
         run: pylint plover_1password
