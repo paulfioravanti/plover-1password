@@ -7,6 +7,12 @@ retrieve secrets defined in your [1Password][] vaults.
 
 ## Install
 
+> [!WARNING]
+> Windows users cannot currently go through the Plover Plugins manager for
+> installation due to [this GitHub issue][] related to getting the [1Password
+> Python SDK][] library onto [PyPI][]. Please see [this issue][] for
+> installation instructions that will require manual installation via [Git][].
+
 1. In the Plover application, open the Plugins Manager (either click the Plugins
    Manager icon, or from the `Tools` menu, select `Plugins Manager`).
 2. From the list of plugins, find `plover-1password`
@@ -48,10 +54,12 @@ choosing the vault that Plover will access, set its access permissions to
 
 Once the Service Account Token has been generated (and you save it to one of
 your vaults), you will need to copy the token into a local [environment
-variable][] called `$OP_SERVICE_ACCOUNT_TOKEN`, as per the requirements of the
+variable][] called `OP_SERVICE_ACCOUNT_TOKEN`, as per the requirements of the
 [1Password Python SDK][], which this plugin uses to connect with 1Password:
 
 **macOS or Linux**
+
+In your `.bashrc`/`.zshrc` etc add:
 
 ```bash
 export OP_SERVICE_ACCOUNT_TOKEN=<your-service-account-token>
@@ -59,8 +67,12 @@ export OP_SERVICE_ACCOUNT_TOKEN=<your-service-account-token>
 
 **Windows**
 
+In your
+`C:\Users\<user name>\Documents\WindowsPowerShell\Microsoft.Powershell_profile.ps1`
+etc add:
+
 ```powershell
-$Env:OP_SERVICE_ACCOUNT_TOKEN = "<your-service-account-token>"
+$ENV:OP_SERVICE_ACCOUNT_TOKEN = "<your-service-account-token>"
 ```
 
 ### Manually install 1Password Python SDK
@@ -74,13 +86,21 @@ python -m pip install git+https://git@github.com/1Password/onepassword-sdk-pytho
 ```
 
 Unfortunately, PyPi does not allow [direct URL dependencies][] in projects, so
-in order to get this plugin on to PyPI, the SDK could not be listed as an
-`install_requires` library (eg
-`onepassword @ git+ssh://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1`,
-meaning a manual installation process instead of the plugin automatically doing
-it for you.
+in order to get this plugin on to PyPI, the SDK could not be listed as a
+required dependency in `setup.cfg` like:
 
-Currently, [this GitHub issue][] is tracking adding the SDK to PyPI.
+```cfg
+[options]
+install_requires =
+    plover >= 4.0.0.dev12
+    onepassword @ git+https://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
+```
+
+This means a manual installation process instead of the plugin automatically
+doing it for you.
+
+Currently, [this GitHub issue][] is tracking adding the SDK to PyPI, which when
+closed will eliminate this step.
 
 ### Install 1Password CLI and turn on desktop app integration
 
@@ -261,5 +281,6 @@ plover --script plover_plugins uninstall plover-1password
 [Setup]: ./#Setup
 [syntax rules]: https://developer.1password.com/docs/cli/secret-reference-syntax/#syntax-rules
 [this GitHub issue]: https://github.com/1Password/onepassword-sdk-python/issues/107
+[this issue]: https://github.com/paulfioravanti/plover-1password/issues/1
 [Tmuxinator]: https://github.com/tmuxinator/tmuxinator
 [`workflow_context.yml`]: https://github.com/openstenoproject/plover/blob/master/.github/workflows/ci/workflow_context.yml
