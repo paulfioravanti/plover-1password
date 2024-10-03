@@ -10,7 +10,7 @@ coverage:
   open htmlcov/index.html
 
 lint:
-  pylint plover_1password
+  pylint src
 
 typecheck:
-  mypy plover_1password
+  mypy src

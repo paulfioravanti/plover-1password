@@ -28,10 +28,10 @@ jobs:
           python -m pip install git+https://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
 
       - name: Run Linter
-        run: pylint plover_1password
+        run: pylint src
 
       - name: Run Type Checker
-        run: mypy plover_1password
+        run: mypy src
 
       - name: Run Tests
         run: pytest
