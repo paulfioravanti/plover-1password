@@ -7,12 +7,6 @@ retrieve secrets defined in your [1Password][] vaults.
 
 ## Install
 
-> [!WARNING]
-> Windows users cannot currently go through the Plover Plugins manager for
-> installation due to [this GitHub issue][] related to getting the [1Password
-> Python SDK][] library onto [PyPI][]. Please see [this issue][] for
-> installation instructions that will require manual installation via [Git][].
-
 1. In the Plover application, open the Plugins Manager (either click the Plugins
    Manager icon, or from the `Tools` menu, select `Plugins Manager`).
 2. From the list of plugins, find `plover-1password`
@@ -74,33 +68,6 @@ etc add:
 ```powershell
 $ENV:OP_SERVICE_ACCOUNT_TOKEN = "<your-service-account-token>"
 ```
-
-### Manually install 1Password Python SDK
-
-The [1Password Python SDK][] is not currently available on [PyPI][], which means
-you will need to install it manually directly via URL with the following
-Python [pip][] command in order for the plugin to work properly:
-
-```console
-python -m pip install git+https://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
-```
-
-Unfortunately, PyPi does not allow [direct URL dependencies][] in projects, so
-in order to get this plugin on to PyPI, the SDK could not be listed as a
-required dependency in `setup.cfg` like:
-
-```cfg
-[options]
-install_requires =
-    plover >= 4.0.0.dev12
-    onepassword @ git+https://git@github.com/1Password/onepassword-sdk-python.git@v0.1.1
-```
-
-This means a manual installation process instead of the plugin automatically
-doing it for you.
-
-Currently, [this GitHub issue][] is tracking adding the SDK to PyPI, which when
-closed will eliminate this step.
 
 ### Install 1Password CLI and turn on desktop app integration
 
@@ -249,11 +216,10 @@ plover --script plover_plugins uninstall plover-1password
 [Coverage.py]: https://github.com/nedbat/coveragepy
 [create a new vault]: https://support.1password.com/create-share-vaults/#create-a-vault
 [create a Service Account]: https://developer.1password.com/docs/service-accounts/get-started/#create-a-service-account
-[direct URL dependencies]: https://setuptools.pypa.io/en/latest/userguide/dependency_management.html#direct-url-dependencies
 [environment variable]: https://en.wikipedia.org/wiki/Environment_variable
 [extension]: https://plover.readthedocs.io/en/latest/plugin-dev/extensions.html
 [Get started with 1Password CLI]: https://developer.1password.com/docs/cli/get-started/
-[Git]: https://git-scm.com/
+[git]: https://git-scm.com/
 [Invoke Plover from the command line]: https://github.com/openstenoproject/plover/wiki/Invoke-Plover-from-the-command-line
 [`just`]: https://github.com/casey/just
 [`justfile`]: ./test/justfile
@@ -262,9 +228,7 @@ plover --script plover_plugins uninstall plover-1password
 [meta]: https://plover.readthedocs.io/en/latest/plugin-dev/metas.html
 [move or copy items]: https://support.1password.com/move-copy-items/
 [Mypy]: https://github.com/python/mypy
-[pip]: https://pip.pypa.io/en/stable/
 [plover-1password project file]: https://github.com/paulfioravanti/dotfiles/blob/master/tmuxinator/plover_1password.yml
-[PyPI]: https://pypi.org/
 [PyPI downloads image]: https://img.shields.io/pypi/dm/plover-1password
 [PyPI version image]: https://img.shields.io/pypi/v/plover-1password
 [PyPI url]: https://pypi.org/project/plover-1password/
@@ -280,7 +244,5 @@ plover --script plover_plugins uninstall plover-1password
 [secret references]: https://developer.1password.com/docs/cli/secret-reference-syntax/
 [Setup]: ./#Setup
 [syntax rules]: https://developer.1password.com/docs/cli/secret-reference-syntax/#syntax-rules
-[this GitHub issue]: https://github.com/1Password/onepassword-sdk-python/issues/107
-[this issue]: https://github.com/paulfioravanti/plover-1password/issues/1
 [Tmuxinator]: https://github.com/tmuxinator/tmuxinator
 [`workflow_context.yml`]: https://github.com/openstenoproject/plover/blob/master/.github/workflows/ci/workflow_context.yml
