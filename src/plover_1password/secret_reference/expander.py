@@ -10,7 +10,7 @@ from .. import shell_command
 _ENV_VAR_SYNTAX: str = "$"
 
 def expand_env_vars(
-    shell_command_resolver: Callable[[str], str],
+    shell_command_resolver: Callable[[str], list[str]],
     secret_reference: str
 ) -> str:
     """

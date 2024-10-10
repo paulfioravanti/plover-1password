@@ -19,9 +19,12 @@ def test_blank_token_env_var_value_on_windows(
         service_account.get_token("Windows", powershell_command)
 
     spy.assert_called_once_with(
-        "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString("
-        "$ENV:OP_SERVICE_ACCOUNT_TOKEN)\"",
+        [
+            "powershell",
+            "-command",
+            "$ExecutionContext.InvokeCommand.ExpandString("
+            "\"$ENV:OP_SERVICE_ACCOUNT_TOKEN\")"
+        ],
         capture_output=True,
         check=False,
         encoding="utf-8",
@@ -43,7 +46,7 @@ def test_blank_token_env_var_value_on_mac_or_linux(
         service_account.get_token("Darwin", bash_command)
 
     spy.assert_called_once_with(
-        "bash -ic 'echo $OP_SERVICE_ACCOUNT_TOKEN'",
+        ["bash", "-ic", "'echo $OP_SERVICE_ACCOUNT_TOKEN'"],
         capture_output=True,
         check=False,
         encoding="utf-8",
@@ -63,9 +66,12 @@ def test_get_token_using_windows(
         == "windows token"
     )
     spy.assert_called_once_with(
-        "powershell -command "
-        "\"$ExecutionContext.InvokeCommand.ExpandString("
-        "$ENV:OP_SERVICE_ACCOUNT_TOKEN)\"",
+        [
+            "powershell",
+            "-command",
+            "$ExecutionContext.InvokeCommand.ExpandString("
+            "\"$ENV:OP_SERVICE_ACCOUNT_TOKEN\")"
+        ],
         capture_output=True,
         check=False,
         encoding="utf-8",
@@ -85,7 +91,7 @@ def test_get_token_using_mac_or_linux(
         == "mac/linux token"
     )
     spy.assert_called_once_with(
-        "bash -ic 'echo $OP_SERVICE_ACCOUNT_TOKEN'",
+        ["bash", "-ic", "'echo $OP_SERVICE_ACCOUNT_TOKEN'"],
         capture_output=True,
         check=False,
         encoding="utf-8",

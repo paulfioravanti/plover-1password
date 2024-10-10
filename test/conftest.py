@@ -28,11 +28,14 @@ def mock_subprocess_run(mocker):
 
 @pytest.fixture()
 def bash_command():
-    return lambda env_var: f"bash -ic 'echo {env_var}'"
+    return lambda env_var: ["bash", "-ic", f"'echo {env_var}'"]
 
 @pytest.fixture()
 def powershell_command():
     return lambda env_var: (
-        "powershell -command "
-        f"\"$ExecutionContext.InvokeCommand.ExpandString({env_var})\""
+        [
+            "powershell",
+            "-command",
+            f"$ExecutionContext.InvokeCommand.ExpandString(\"{env_var}\")"
+        ]
     )

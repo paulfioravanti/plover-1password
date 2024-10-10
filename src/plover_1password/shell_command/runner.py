@@ -6,11 +6,11 @@ import subprocess
 from typing import Callable
 
 
-def run(shell_command_resolver: Callable[[str], str], target: str) -> str:
+def run(shell_command_resolver: Callable[[str], list[str]], target: str) -> str:
     """
     Runs a provided shell command against target in a subprocess.
     """
-    command: str = shell_command_resolver(target)
+    command: list[str] = shell_command_resolver(target)
     result: str = subprocess.run(
         command,
         capture_output=True,

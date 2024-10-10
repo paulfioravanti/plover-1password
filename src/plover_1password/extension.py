@@ -35,7 +35,7 @@ class OnePassword:
     _client: Client
     _engine: StenoEngine
     _platform: str
-    _shell_command: Callable[[str], str]
+    _shell_command: Callable[[str], list[str]]
 
     def __init__(self, engine: StenoEngine) -> None:
         self._engine = engine

@@ -13,7 +13,7 @@ _SHELL_TOKEN_ENV_VAR_NAME: str = f"${_TOKEN_ENV_VAR_NAME}"
 
 def get_token(
     platform: str,
-    shell_command_resolver: Callable[[str], str]
+    shell_command_resolver: Callable[[str], list[str]]
 ) -> str:
     """
     Returns token from the local environment and errors if it is empty.
