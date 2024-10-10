@@ -19,7 +19,7 @@ _POWERSHELL_COMMAND: Callable[[str], list[str]] = lambda env_var: (
 # the only way to access a user's env vars on a Mac outside Plover's
 # environment.
 _SHELL_COMMAND: Callable[[str], Callable[[str], list[str]]] = lambda shell: (
-    lambda env_var: [f"{shell}", "-ic", f"'echo {env_var}'"]
+    lambda env_var: [f"{shell}", "-ic", f"echo {env_var}"]
 )
 
 def resolve(platform: str) -> Callable[[str], list[str]]:

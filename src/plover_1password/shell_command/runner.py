@@ -15,8 +15,7 @@ def run(shell_command_resolver: Callable[[str], list[str]], target: str) -> str:
         command,
         capture_output=True,
         check=False,
-        encoding="utf-8",
-        shell=True
+        encoding="utf-8"
     ).stdout.strip()
 
     return result

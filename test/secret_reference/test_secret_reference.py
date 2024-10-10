@@ -31,12 +31,11 @@ def test_expand_secret_reference_using_mac_or_linux(
         [
             "bash",
             "-ic",
-            "'echo op://$VAULT_NAME/$ITEM_NAME/$SECTION_NAME/Mobile'"
+            "echo op://$VAULT_NAME/$ITEM_NAME/$SECTION_NAME/Mobile"
         ],
         capture_output=True,
         check=False,
-        encoding="utf-8",
-        shell=True
+        encoding="utf-8"
     )
 
 def test_expand_secret_reference_using_windows(
@@ -63,6 +62,5 @@ def test_expand_secret_reference_using_windows(
         ],
         capture_output=True,
         check=False,
-        encoding="utf-8",
-        shell=True
+        encoding="utf-8"
     )
